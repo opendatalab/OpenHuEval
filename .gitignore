@@ -1,0 +1,9 @@
+.vscode/
+
+data/
+scripts/
+script/
+tmp/
+
+pyrightconfig.json
+
