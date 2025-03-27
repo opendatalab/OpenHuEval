@@ -1,0 +1,16 @@
+Problem P = <problem> 
+Solution Draft S = <split_solutions> 
+Correct Answer A = <expected_answer>
+
+1. Please analyze the relevance between the solution S and the problem P, and conduct some verifications to check the correctness of the solution itself. Please think step by step to give an explanation **EXPLANATION**.
+
+2. If you think the solution draft S can lead to the correct answer A of the problem P, please stick to the line of thinking without deviation and carry it through to completion. If you think it cannot yield the correct answer or you’re not sure, don’t force yourself to give an answer and generate **None**.
+
+3. Please tell me honestly how confident you are that you can solve the problem P correctly based on the the solution draft S. Out of 2, please generate your confidence score **CONFIDENT SCORE**.
+
+Please output **EXPLANATION** and **CONFIDENT SCORE** according to the following JSON format:
+{
+    "expalanation": "EXPLANATION",
+    "confident_score": "CONFIDENT SCORE"
+}
+

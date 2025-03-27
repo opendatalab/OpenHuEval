@@ -1,0 +1,343 @@
+Role
+You are a text judgement and reasoning expert.
+
+Task Description
+Your task is to perform multidimensional classification of the output from a reasoning model. The model's output has been segmented into multiple segments (Introduction, Reasoning, Review, Final_answer), among which there are Reasoning-type segments. You need to classify these Reasoning segments based on the following four dimensions:
+
+Dimensions and Classification Rules:
+
+Dimension 1: Correctness of the Result
+Based on the options and the standard answer (std_ans) and the model's answer (model_ans), determine whether the result in each Reasoning segment is correct. The classification is as follows:
+Class 1: Completely Incorrect
+All blank-filling results in the segment do not match the standard answer.
+Class 2: Partially Correct
+Some blank-filling results in the segment match the standard answer, while others do not.
+Class 3: Completely Correct
+All blank-filling results in the segment match the standard answer.
+Class 4: Non Conclusion
+No conclusion has been provided yet.
+Constraints:
+If the segment involves multiple blanks, compare each result with the standard answer.
+If the segment does not explicitly mention the blank-filling results, infer based on the context.
+
+Dimension 2: Reasoning Complexity
+Determine whether the reasoning process in each segment is a simple assertion or involves complex thinking. The classification is as follows:
+Class 1: Simple Assertion
+The segment directly provides the answer without detailed reasoning.
+Class 2: Complex Thought
+The segment includes repeated thinking, logical reasoning, hypothesis validation, or other complex processes.
+Constraints:
+If the segment contains keywords such as: “Wait, perhaps...”,“I need to consider...”,“Alternatively...”,“Hmm, maybe...”,“Let me think...” classify it as “Complex Thought.”
+If the segment only directly provides the answer (e.g., “#1# is H.508”), classify it as “Simple Assertion.”
+
+Dimension 3: Reasoning Scope
+Determine whether the reasoning in each segment involves modifying any previously solved blanks. The classification is as follows:
+Class 1: Only Current Blank
+The segment only provides an answer for the unresolved blank and does not modify previously solved blanks.
+Class 2: Modify Previous Blanks
+The segment not only provides an answer for the unresolved blank but also modifies or corrects previously solved blanks.
+Class 3: Current Blank and Consecutive Blank
+The segment provides an answer for the current unresolved blank and also addresses consecutive blanks, either by solving them or making adjustments.
+Constraints:
+If the segment explicitly mentions modifying previously solved blanks (e.g., “Wait, I need to change #2# to...”), classify it as "Modify Previous Blanks."
+If the segment only focuses on the current blank, classify it as "Only Current Blank."
+If the segment addresses both the current blank and consecutive blanks, classify it as "Current Blank and Consecutive Blank."
+
+Dimension 4: Language Transfer
+Determine whether each Reasoning segment includes the process of translating Hungarian into English. The classification is as follows:
+Class 1: Contains Language Transfer
+The segment includes a translation process similar to:
+“Erőteljes #3# és a költői #4# gazdag használata jellemzi.”
+This translates to “It is characterized by strong #3# and rich use of poetic #4#.”
+Class 2: No Language Transfer
+The segment does not include the above translation process.
+Constraints:
+If the segment contains an explicit translation process (e.g., “This translates to...”), classify it as “Contains Language Transfer.”
+If the segment only uses Hungarian or English without translation, classify it as “No Language Transfer.”
+
+Example Input:
+{
+  "options": [
+      "A.arisztokrata",
+      "B.sztratégosz",
+      "C.Attika",
+      "D.népgyűlés",
+      "E.polgárjogot",
+      "F.polgár",
+      "G.türannosz",
+      "H.508",
+      "I.Szolón",
+      "J.Drakón",
+      "K.phülét",
+      "L.türannisz",
+      "M.bulé",
+      "N.ötszázak",
+      "O.610",
+      "P.Peloponnészosz"
+    ],
+  "std_ans": [
+    "#0#L",
+    "#1#H",
+    "#2#A",
+    "#3#I",
+    "#4#E",
+    "#5#C",
+    "#6#K",
+    "#7#N",
+    "#8#B",
+    "#9#M",
+    "#10#D",
+    "#11#F"
+  ],
+  "model_ans": [
+    "#0#L",
+    "#1#H",
+    "#2#A",
+    "#3#I",
+    "#4#E",
+    "#5#C",
+    "#6#K",
+    "#7#M",
+    "#8#B",
+    "#9#M",
+    "#10#D",
+    "#11#F"
+  ],
+  "segments": [
+    {
+        'text': "Alright, I have this task to fill in the blanks in a text about ancient Athens and its political system. The text is in Hungarian, and I need to choose the correct options from a list to complete it. I'm a bit rusty on ancient Greek history, but I think I can manage with some careful thinking and maybe a little help from the internet.",
+        'category': "Introduction"
+    },
+    {
+        'text': "First, I need to understand the context. The text is about Cleisthenes, often called the \"father of Athenian democracy.\" It mentions that he came to power in a certain year, supported by the people, and that he was from a prominent family. He continued the reforms of someone else and ensured equal rights for all free citizens. There's also mention of dividing the territory of Attica into ten parts, each contributing members to a council, and having their own military units. He placed the main power in the hands of the Boule (the council of five hundred) and the Ekklesia (the assembly). Every free Athenian man had the right to vote and could be elected to the Boule.",
+        'category': "Reasoning"
+    },
+    {
+        'text': "Okay, let's look at the blanks one by one.\n\n**#0** The text says \"Kleiszthenész, az 'athéni demokrácia atyja', a #0# rendszer bukása után Kr. e. #1# -ban a népre támaszkodva került hatalomra.\" So, Cleisthenes came to power after the collapse of a certain system in a specific year, relying on the people. I know that before Cleisthenes, there was a period of tyranny in Athens. So, perhaps #0# is related to the tyrants. Looking at the options, there's 'L. türannisz' which means 'tyrant.' That could be a possibility. But there's also 'A. arisztokrata,' which means 'aristocratic.' Maybe the aristocratic system collapsed. Hmm. Wait, Cleisthenes came after the overthrow of the Peisistratid tyranny. So, it's more likely that it's the tyrannical system that collapsed. So, I'll go with 'L. türannisz.'",
+        'category': "Reasoning"
+    },
+    {
+        'text': "**#1** This should be the year when Cleisthenes came to power. I recall that Cleisthenes implemented his reforms around 508 BC. Looking at the options, there's 'H.508,' which matches perfectly.",
+        'category': "Reasoning"
+    },
+    {
+        'text': "**#2** The text says that Cleisthenes was from a #2# nemzetségből, meaning a certain type of family or class. Given that he was part of the Alcmaeonid family, which was aristocratic, I think 'A. arisztokrata' fits here.",
+        'category': "Reasoning"
+    },
+    {
+        'text': "**#3** He continued the reformjait, meaning the reforms of someone. I know that Solon was an earlier reformer in Athens, and Cleisthenes built upon his reforms. Looking at the options, 'I. Szolón' is Solon, so that should be it.",
+        'category': "Reasoning"
+    },
+    {
+        'text': "**#4** The text says that since he tied polgárjogot (citizenship rights) to lakóhelyhez (place of residence), he had to create something in Attika. So, he created 10 districts in Attika, each contributing members to the council. This sounds like the creation of the demes or trittyes in Attica. But looking at the options, 'C. Attika' is the region, but I need something more specific. Maybe 'E. polgárjogot' is already used, but it's about citizenship. Hmm. Perhaps I need to look elsewhere.",
+        'category': "Reasoning"
+    },
+    {
+        'text': "Wait, the text says \"mivel ezt a #4# a lakóhelyhez kötötte, létre kellett hoznia #5# területén 10 darab #6#.\" So, because he tied something to place of residence, he had to create 10 something in the territory of Attica. I think #4# is likely 'E. polgárjogot,' meaning citizenship rights, as citizenship was tied to place of residence.",
+        'category': "Reasoning"
+    },
+    {
+        'text': "**#5** This should be the territory where he created these 10 units. Since it's Attica, 'C. Attika' seems appropriate.",
+        'category': "Reasoning"
+    },
+    {
+        'text': "**#6** These are the 10 units he created. In Cleisthenes' reforms, he divided Attica into 10 tribes, but also into 10 trittyes or regions. But in Hungarian, it's \"10 darab,\" meaning 10 units. Perhaps 'phülét,' which I think is 'tribe,' but 'K. phülét' is listed. Alternatively, it could be 'deme,' but that's not in the options. I'll go with 'K. phülét,' assuming it's tribes.",
+        'category': "Reasoning"
+    },
+    {
+        'text': "**#7** From each of these 10 units, 50-50 tags (members) came to the #7# tanácsába. So, this is the council they were entering. Given that it's a council of five hundred, it's likely the Boule. Looking at the options, 'M. bulé' is there, which is the Boule, so that fits.",
+        'category': "Reasoning"
+    },
+    {
+        'text': "**#8** Each of these units also had their own #8# vezette katonai csapataikat, meaning their own leaders for military units. I think this refers to the local administrators or officers. Perhaps 'sztratégosz,' which is strategos, but that's a general. Maybe not exactly fitting. Alternatively, it could be the local officials within the tribes. Maybe I need to think differently.",
+        'category': "Reasoning"
+    },
+    {
+        'text': "Wait, perhaps it's referring to the local leaders within each tribe or district. Maybe like the 'phylarch,' but I don't know if that's directly translatable. Given the options, perhaps 'B. sztratégosz' could work, but I'm not entirely sure.",
+        'category': "Reasoning"
+    },
+    {
+        'text': "**#9** He placed the main power in the hands of the #9# (ötszázak tanácsa), which translates to \"council of five hundred.\" So, that's clearly the Boule again. 'M. bulé' should be the answer here.",
+        'category': "Reasoning"
+    },
+    {
+        'text': "**#10** And also in the hands of the #10# (ekklészia), which is the assembly, the Ekklesia. I think 'D. népgyűlés' corresponds to the assembly of the people, so that should be it.",
+        'category': "Reasoning"
+    },
+    {
+        'text': "**#11** Finally, with the expanded voting rights, every free Athenian man was not only a voter but also eligible to be elected to the Boule. So, this seems straightforward. Wait, but looking back, I need to make sure all the choices make sense in context.",
+        'category': "Reasoning"
+    },
+    {
+        'text': "Let me summarize my choices so far:\n\n- #0# L. türannisz\n\n- #1# H.508\n\n- #2# A. arisztokrata\n\n- #3# I. Szolón\n\n- #4# E. polgárjogot\n\n- #5# C. Attika\n\n- #6# K. phülét\n\n- #7# M. bulé\n\n- #8# B. sztratégosz\n\n- #9# M. bulé\n\n- #10# D. népgyűlés\n\n- #11# F. polgár\n\nWait, but #11# should be about the free Athenian men being both voters and eligible to be elected. 'F. polgár' means 'citizen,' which could work, but perhaps there's a better fit.\n\nLooking back, maybe 'F. polgár' is appropriate here, as it refers to citizens.",
+        'category': "Review"
+    },
+    {
+        'text': "Now, double-checking some points:\n\n- #4# is about tying something to place of residence, leading to the creation of 10 units in Attica. I chose 'E. polgárjogot,' which is citizenship rights. That seems correct because Cleisthenes tied citizenship to place of residence, creating new political tribes based on where people lived, rather than their noble lineage.\n\n- #6# is about the 10 units created in Attica. I chose 'K. phülét,' which I believe means 'tribes.' That seems right.\n\n- #8# is about the leaders of the military units within these tribes. I chose 'B. sztratégosz,' which is strategos, but I'm not entirely sure if that's accurate. Maybe I need to consider another option.",
+        'category': "Review"
+    },
+    {
+        'text': "Alternatively, perhaps it's referring to the local officials within the tribes, like 'phylarch.' But since that's not in the options, and 'sztratégosz' is the closest, I'll stick with that.\n\nAlso, I notice that 'N. ötszázak' is \"five hundred,\" which refers to the Boule, but I already used 'M. bulé' for that.\n\nSimilarly, 'P. Peloponnészosz' is the Peloponnesian, which doesn't seem relevant here.\n\nI think my choices are mostly correct, but I might need to adjust #8# if 'sztratégosz' isn't the best fit.\n\nAlternatively, perhaps #8# should be 'Vitéz János,' but that doesn't make sense in this context.\n\nWait, perhaps I need to consider that each tribe had its own officials, and maybe 'főpohárnok' or some other title, but those aren't in the options.\n\nGiven the options provided, 'B. sztratégosz' might be the best available choice, even if it's not perfectly accurate.\n\nAlright, I think I'll stick with my initial choices.",
+        'category': "Review"
+    },
+    {
+        'text': "So, the final answer should be:\n\n{\n\n\"answer\": [\"#0#L\", \"#1#H\", \"#2#A\", \"#3#I\", \"#4#E\", \"#5#C\", \"#6#K\", \"#7#M\", \"#8#B\", \"#9#M\", \"#10#D\", \"#11#F\"]\n\n}\n\n**Final Answer**\n\n\\[ \\boxed{\\text{#0#L, #1#H, #2#A, #3#I, #4#E, #5#C, #6#K, #7#M, #8#B, #9#M, #10#D, #11#F}} \\]",
+        'category': "Final_answer"
+    }
+  ]
+}
+
+Example Output:{
+  "segments": [
+    {
+        'text': "Alright, I have this task to fill in the blanks in a text about ancient Athens and its political system. The text is in Hungarian, and I need to choose the correct options from a list to complete it. I'm a bit rusty on ancient Greek history, but I think I can manage with some careful thinking and maybe a little help from the internet.",
+        'category': "Introduction"
+    },
+    {
+        'text': "First, I need to understand the context. The text is about Cleisthenes, often called the \"father of Athenian democracy.\" It mentions that he came to power in a certain year, supported by the people, and that he was from a prominent family. He continued the reforms of someone else and ensured equal rights for all free citizens. There's also mention of dividing the territory of Attica into ten parts, each contributing members to a council, and having their own military units. He placed the main power in the hands of the Boule (the council of five hundred) and the Ekklesia (the assembly). Every free Athenian man had the right to vote and could be elected to the Boule.",
+        'category': "Reasoning",
+        'Dimension1': "Non Conclusion",
+        'Dimension2': "Complex Thought",
+        'Dimension3': "Only Current Blank",
+        'Dimension4': "No Language Transfer",
+    },
+    {
+        'text': "Okay, let's look at the blanks one by one.\n\n**#0** The text says \"Kleiszthenész, az 'athéni demokrácia atyja', a #0# rendszer bukása után Kr. e. #1# -ban a népre támaszkodva került hatalomra.\" So, Cleisthenes came to power after the collapse of a certain system in a specific year, relying on the people. I know that before Cleisthenes, there was a period of tyranny in Athens. So, perhaps #0# is related to the tyrants. Looking at the options, there's 'L. türannisz' which means 'tyrant.' That could be a possibility. But there's also 'A. arisztokrata,' which means 'aristocratic.' Maybe the aristocratic system collapsed. Hmm. Wait, Cleisthenes came after the overthrow of the Peisistratid tyranny. So, it's more likely that it's the tyrannical system that collapsed. So, I'll go with 'L. türannisz.'",
+        'category': "Reasoning",
+        'Dimension1': "Completely Correct",
+        'Dimension2': "Complex Thought",
+        'Dimension3': "Only Current Blank",
+        'Dimension4': "No Language Transfer",
+    },
+    {
+        'text': "**#1** This should be the year when Cleisthenes came to power. I recall that Cleisthenes implemented his reforms around 508 BC. Looking at the options, there's 'H.508,' which matches perfectly.",
+        'category': "Reasoning",
+        'Dimension1': "Completely Correct",
+        'Dimension2': "Simple Assertion",
+        'Dimension3': "Only Current Blank",
+        'Dimension4': "No Language Transfer",
+    },
+    {
+        'text': "**#2** The text says that Cleisthenes was from a #2# nemzetségből, meaning a certain type of family or class. Given that he was part of the Alcmaeonid family, which was aristocratic, I think 'A. arisztokrata' fits here.",
+        'category': "Reasoning",
+        'Dimension1': "Completely Correct",
+        'Dimension2': "Complex Thought",
+        'Dimension3': "Only Current Blank",
+        'Dimension4': "No Language Transfer",
+    },
+    {
+        'text': "**#3** He continued the reformjait, meaning the reforms of someone. I know that Solon was an earlier reformer in Athens, and Cleisthenes built upon his reforms. Looking at the options, 'I. Szolón' is Solon, so that should be it.",
+        'category': "Reasoning",
+        'Dimension1': "Completely Correct",
+        'Dimension2': "Simple Assertion",
+        'Dimension3': "Only Current Blank",
+        'Dimension4': "No Language Transfer",
+    },
+    {
+        'text': "**#4** The text says that since he tied polgárjogot (citizenship rights) to lakóhelyhez (place of residence), he had to create something in Attika. So, he created 10 districts in Attika, each contributing members to the council. This sounds like the creation of the demes or trittyes in Attica. But looking at the options, 'C. Attika' is the region, but I need something more specific. Maybe 'E. polgárjogot' is already used, but it's about citizenship. Hmm. Perhaps I need to look elsewhere.",
+        'category': "Reasoning",
+        'Dimension1': "Non Conclusion",
+        'Dimension2': "Complex Thought"
+        'Dimension3': "Only Current Blank",
+        'Dimension4': "No Language Transfer",
+    },
+    {
+        'text': "Wait, the text says \"mivel ezt a #4# a lakóhelyhez kötötte, létre kellett hoznia #5# területén 10 darab #6#.\" So, because he tied something to place of residence, he had to create 10 something in the territory of Attica. I think #4# is likely 'E. polgárjogot,' meaning citizenship rights, as citizenship was tied to place of residence.",
+        'category': "Reasoning",
+        'Dimension1': "Completely Correct",
+        'Dimension2': "Complex Thought",
+        'Dimension3': "Current Blank and Consecutive Blank",
+        'Dimension4': "No Language Transfer",
+    },
+    {
+        'text': "**#5** This should be the territory where he created these 10 units. Since it's Attica, 'C. Attika' seems appropriate.",
+        'category': "Reasoning",
+        'Dimension1': "Completely Correct",
+        'Dimension2': "Simple Assertion",
+        'Dimension3': "Only Current Blank",
+        'Dimension4': "No Language Transfer",
+    },
+    {
+        'text': "**#6** These are the 10 units he created. In Cleisthenes' reforms, he divided Attica into 10 tribes, but also into 10 trittyes or regions. But in Hungarian, it's \"10 darab,\" meaning 10 units. Perhaps 'phülét,' which I think is 'tribe,' but 'K. phülét' is listed. Alternatively, it could be 'deme,' but that's not in the options. I'll go with 'K. phülét,' assuming it's tribes.",
+        'category': "Reasoning",
+        'Dimension1': "Completely Correct",
+        'Dimension2': "Complex Thought",
+        'Dimension3': "Only Current Blank",
+        'Dimension4': "No Language Transfer",
+    },
+    {
+        'text': "**#7** From each of these 10 units, 50-50 tags (members) came to the #7# tanácsába. So, this is the council they were entering. Given that it's a council of five hundred, it's likely the Boule. Looking at the options, 'M. bulé' is there, which is the Boule, so that fits.",
+        'category': "Reasoning",
+        'Dimension1': "Completely Incorrect",
+        'Dimension2': "Simple Assertion",
+        'Dimension3': "Only Current Blank",
+        'Dimension4': "No Language Transfer",
+    },
+    {
+        'text': "**#8** Each of these units also had their own #8# vezette katonai csapataikat, meaning their own leaders for military units. I think this refers to the local administrators or officers. Perhaps 'sztratégosz,' which is strategos, but that's a general. Maybe not exactly fitting. Alternatively, it could be the local officials within the tribes. Maybe I need to think differently.",
+        'category': "Reasoning",
+        'Dimension1': "Non Conclusion",
+        'Dimension2': "Complex Thought",
+        'Dimension3': "Only Current Blank",
+        'Dimension4': "No Language Transfer",
+    },
+    {
+        'text': "Wait, perhaps it's referring to the local leaders within each tribe or district. Maybe like the 'phylarch,' but I don't know if that's directly translatable. Given the options, perhaps 'B. sztratégosz' could work, but I'm not entirely sure.",
+        'category': "Reasoning",
+        'Dimension1': "Completely Correct",
+        'Dimension2': "Complex Thought",
+        'Dimension3': "Only Current Blank",
+        'Dimension4': "No Language Transfer",
+    },
+    {
+        'text': "**#9** He placed the main power in the hands of the #9# (ötszázak tanácsa), which translates to \"council of five hundred.\" So, that's clearly the Boule again. 'M. bulé' should be the answer here.",
+        'category': "Reasoning",
+        'Dimension1': "Completely Correct",
+        'Dimension2': "Simple Assertion",
+        'Dimension3': "Only Current Blank",
+        'Dimension4': "No Language Transfer",
+    },
+    {
+        'text': "**#10** And also in the hands of the #10# (ekklészia), which is the assembly, the Ekklesia. I think 'D. népgyűlés' corresponds to the assembly of the people, so that should be it.",
+        'category': "Reasoning",
+        'Dimension1': "Completely Correct",
+        'Dimension2': "Simple Assertion",
+        'Dimension3': "Only Current Blank",
+        'Dimension4': "No Language Transfer",
+    },
+    {
+        'text': "**#11** Finally, with the expanded voting rights, every free Athenian man was not only a voter but also eligible to be elected to the Boule. So, this seems straightforward. Wait, but looking back, I need to make sure all the choices make sense in context.",
+        'category': "Reasoning",
+        'Dimension1': "Completely Correct",
+        'Dimension2': "Simple Assertion",
+        'Dimension3': "Only Current Blank",
+        'Dimension4': "No Language Transfer",
+    },
+    {
+        'text': "Let me summarize my choices so far:\n\n- #0# L. türannisz\n\n- #1# H.508\n\n- #2# A. arisztokrata\n\n- #3# I. Szolón\n\n- #4# E. polgárjogot\n\n- #5# C. Attika\n\n- #6# K. phülét\n\n- #7# M. bulé\n\n- #8# B. sztratégosz\n\n- #9# M. bulé\n\n- #10# D. népgyűlés\n\n- #11# F. polgár\n\nWait, but #11# should be about the free Athenian men being both voters and eligible to be elected. 'F. polgár' means 'citizen,' which could work, but perhaps there's a better fit.\n\nLooking back, maybe 'F. polgár' is appropriate here, as it refers to citizens.",
+        'category': "Review"
+    },
+    {
+        'text': "Now, double-checking some points:\n\n- #4# is about tying something to place of residence, leading to the creation of 10 units in Attica. I chose 'E. polgárjogot,' which is citizenship rights. That seems correct because Cleisthenes tied citizenship to place of residence, creating new political tribes based on where people lived, rather than their noble lineage.\n\n- #6# is about the 10 units created in Attica. I chose 'K. phülét,' which I believe means 'tribes.' That seems right.\n\n- #8# is about the leaders of the military units within these tribes. I chose 'B. sztratégosz,' which is strategos, but I'm not entirely sure if that's accurate. Maybe I need to consider another option.",
+        'category': "Review"
+    },
+    {
+        'text': "Alternatively, perhaps it's referring to the local officials within the tribes, like 'phylarch.' But since that's not in the options, and 'sztratégosz' is the closest, I'll stick with that.\n\nAlso, I notice that 'N. ötszázak' is \"five hundred,\" which refers to the Boule, but I already used 'M. bulé' for that.\n\nSimilarly, 'P. Peloponnészosz' is the Peloponnesian, which doesn't seem relevant here.\n\nI think my choices are mostly correct, but I might need to adjust #8# if 'sztratégosz' isn't the best fit.\n\nAlternatively, perhaps #8# should be 'Vitéz János,' but that doesn't make sense in this context.\n\nWait, perhaps I need to consider that each tribe had its own officials, and maybe 'főpohárnok' or some other title, but those aren't in the options.\n\nGiven the options provided, 'B. sztratégosz' might be the best available choice, even if it's not perfectly accurate.\n\nAlright, I think I'll stick with my initial choices.",
+        'category': "Review"
+    },
+    {
+        'text': "So, the final answer should be:\n\n{\n\n\"answer\": [\"#0#L\", \"#1#H\", \"#2#A\", \"#3#I\", \"#4#E\", \"#5#C\", \"#6#K\", \"#7#M\", \"#8#B\", \"#9#M\", \"#10#D\", \"#11#F\"]\n\n}\n\n**Final Answer**\n\n\\[ \\boxed{\\text{#0#L, #1#H, #2#A, #3#I, #4#E, #5#C, #6#K, #7#M, #8#B, #9#M, #10#D, #11#F}} \\]",
+        'category': "Final_answer"
+    }
+  ]
+}
+
+Notes
+1.Ensure that every Reasoning segment is classified, and the classification results are logical.
+2.If a dimension cannot be clearly classified for a segment, infer the most appropriate category based on the context.
+3.The output must be in JSON format and include classification results for all four dimensions.
+
+Now, the target content you need to process is as follows. Please provide your standardized answer after Example Output in JSON format:
+Example Input:
+{Raw_Seg}
+Example Output:

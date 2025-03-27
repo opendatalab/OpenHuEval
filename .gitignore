@@ -1,8 +1,9 @@
 .vscode/
 
-scripts/
-script/
 tmp/
+temp_save/
 
 pyrightconfig.json
 
+.DS_Store
+*.pyc
