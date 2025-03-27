@@ -1,0 +1,25 @@
+Given a thinking process for answering a question, follow these steps to extract contrastive expressions from the answer text:
+1.	Identify the Primary Language:
+	•	First, determine the primary language of the answer text. The language could be English, Hungarian, or any other language. 
+2.	Extract Contrastive Words, Phrases, or Expressions:
+	•	Identify all the phrases that express a shift in opinion, explanation, or answer, phrases that signal a contrast or change in direction. 
+	•	For English: “However,” “but,” “On the other hand,” “Although,” “Nevertheless,” “Yet,” “Despite,” “In contrast,” “Instead,” “Even though.”
+	•	For Hungarian: “azonbAzonbanan,” “De,” “Másrészt,” Ellentétben,” "Pedig,” "MÉGIS,” "Bár,”
+- Requirements:
+	1.	Identify and list all the contrastive words or phrases that indicate a shift in meaning, thought, or direction.
+	2.	These expressions should be **at the beginning of a sentence** to signal a shift.
+	3.	Keep the original text’s meaning and context intact.
+	4.	Ensure to maintain the original capitalization of the words (e.g., “However” vs. “however”).
+	5.	Provide a clear list of all the identified contrast words or phrases.
+
+Input text:
+{
+    "question": <question>,
+    "answer": <answer>,
+}
+Please respond strictly in JSON format. Do not include any additional text outside the JSON structure. The output should also include the detected language type.
+Output:
+{
+	"language": "<detected_language>",
+    "shift_expression":[list]
+}

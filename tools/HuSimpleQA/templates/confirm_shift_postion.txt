@@ -1,0 +1,11 @@
+Given the thinking process, identify all the phrases that express a shift in opinion, explanation, or answer, i.e., phrases that signal a contrast or change in direction (commonly known as “contradiction,” “contrast,” or “transition” phrases). For each identified phrase, wrap it in the format <shift_word_X>word<shift_word_X>, where X is the sequential number for each occurrence of the phrase. Notice that the text provided may be in either Hungarian or English.
+You should provide a list of the sequence numbers corresponding to the phrases that convey a shift in meaning.
+If there is no "<shift_word_X>" tag in text, return an empty list.
+
+Input text:
+<input_text>
+Please respond strictly in JSON format. Do not include any additional text outside the JSON structure. 
+Output:
+{
+    "shift_word_ids": [list of sequential numbers of shifting phrases]
+}
