@@ -10,7 +10,7 @@
 
 </div>
 
-## Comparison of commonsense reasoning benchmarks
+## Comparison of related benchmarks
 
 <!-- <style>
 .benchmark-table {
