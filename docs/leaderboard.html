@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;400&display=swap" rel="stylesheet">
+
+
+<head>
+  <meta charset="UTF-8">
+  <title>OpenHuEval Leaderboard</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,600,400italic,600italic,300,300italic'
+    rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+  <!-- favicon.svg -->
+  <!-- <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👍</text></svg>"> -->
+  <!-- <link rel="icon" href="/favicon.svg" /> -->
+  <link rel="icon" href="https://images.emojiterra.com/google/noto-emoji/unicode-15.1/color/512px/1f6e0.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css">
+
+  <style type="text/css">
+    body {
+      font-family: "Titillium Web", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+      font-weight: 300;
+      font-size: 20px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media screen and (min-width: 980px) {
+      body {
+        width: 980px;
+      }
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th,
+    tbody td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+      font-size: 15px;
+      /* 调整字体大小为14像素 */
+    }
+
+    td strong {
+      font-weight: bold;
+      /* 设置字体为粗体 */
+    }
+
+    thead th {
+      background-color: lightgray;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tbody tr:hover {
+      background-color: #ddd;
+    }
+
+    .fixed-header {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background-color: #f9f9f9;
+    }
+
+
+    h4 {
+      text-align: center;
+      font-weight: 300;
+      line-height: 1.15em;
+      font-size: 20px;
+      font-weight: bold;
+      /* 设置标题的字号大小 */
+
+    }
+
+    h2 {
+      font-size: 1.75em;
+    }
+
+    a:link,
+    a:visited {
+      color: #5364cc;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #208799;
+    }
+
+    h3 {
+      text-align: left;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 40px;
+      font-weight: 500;
+    }
+
+    h2 {
+      font-weight: 400;
+      margin: 16px 0px 4px 0px;
+    }
+
+    h3 {
+      font-weight: 600;
+      margin: 16px 0px 4px 0px;
+    }
+
+    .paper-title {
+      padding: 1px 0px 1px 0px;
+    }
+
+    h5 {
+      font-size: 24px;
+      color: #800080;
+    }
+
+    h6 {
+      color: #008080;
+    }
+
+    ul {
+      list-style-type: disc;
+      margin-left: 20px;
+    }
+
+    section {
+      margin: 32px 0px 32px 0px;
+      text-align: justify;
+      clear: both;
+    }
+
+    .col-5 {
+      width: 20%;
+      float: left;
+    }
+
+    .move-down {
+      margin-top: 1.2cm;
+    }
+
+    .col-4 {
+      width: 25%;
+      float: left;
+    }
+
+    .col-3 {
+      width: 33%;
+      float: left;
+    }
+
+    .col-2 {
+      width: 50%;
+      float: left;
+    }
+
+    .col-1 {
+      width: 100%;
+      float: left;
+    }
+
+    .author-row,
+    .affil-row {
+      font-size: 17px;
+    }
+
+    .author-row-new {
+      text-align: center;
+    }
+
+    .author-row-new a {
+      display: inline-block;
+      font-size: 17px;
+      padding: 4px;
+    }
+
+    .author-row-new sup {
+      color: #313436;
+      font-size: 13 px;
+      padding: 4px;
+    }
+
+    .affiliations-new {
+      font-size: 16px;
+      text-align: center;
+      width: 80%;
+      margin: 0 auto;
+      margin-bottom: 20px;
+    }
+
+    .row {
+      margin: 16px 0px 16px 0px;
+    }
+
+    .authors {
+      font-size: 26px;
+    }
+
+    .affiliatons {
+      font-size: 18px;
+    }
+
+    .affil-row {
+      margin-top: 18px;
+    }
+
+    .teaser {
+      max-width: 100%;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .screenshot {
+      width: 256px;
+      border: 1px solid #ddd;
+    }
+
+    .screenshot-el {
+      margin-bottom: 16px;
+    }
+
+    hr {
+      height: 1px;
+      border: 0;
+      border-top: 1px solid #ddd;
+      margin: 0;
+    }
+
+    .material-icons {
+      vertical-align: -6px;
+    }
+
+    p {
+      line-height: 1.25em;
+    }
+
+    .caption {
+      font-size: 20px;
+      color: #000000;
+      margin-top: 4px;
+      margin-bottom: 10px;
+      text-align: left;
+      font-weight: bold;
+    }
+
+
+    video {
+      display: block;
+      margin: auto;
+    }
+
+
+    figure {
+      display: block;
+      margin: auto;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    #bibtex pre {
+      font-size: 14px;
+      background-color: #eee;
+      padding: 16px;
+    }
+
+    .orange {
+      color: #d35400;
+      font-weight: bold;
+    }
+
+    .flex-row {
+      display: flex;
+      flex-flow: row wrap;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .flex-row-center {
+      display: flex;
+      flex-flow: row wrap;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .flex-container {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .flex-item {
+      flex: 0 0 50%;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .paper-btn-coming-soon {
+      position: relative;
+      top: 0;
+      left: 0;
+    }
+
+    .coming-soon {
+      position: absolute;
+      top: -15px;
+      right: -15px;
+    }
+
+    .center {
+      margin-left: 10.0%;
+      margin-right: 10.0%;
+    }
+
+    .paper-btn {
+      position: relative;
+      text-align: center;
+
+      display: inline-block;
+      margin: 8px;
+      padding: 8px 8px;
+
+      border-width: 0;
+      outline: none;
+      border-radius: 2px;
+
+      background-color: #E0F7FA;
+      color: #01579B !important;
+      font-size: 20px;
+      width: 200px;
+      font-weight: 600;
+    }
+
+    .paper-btn-tapestry {
+      position: relative;
+      text-align: center;
+
+      display: inline-block;
+      margin: 8px;
+      padding: 8px 8px;
+
+      border-width: 0;
+      outline: none;
+      border-radius: 2px;
+
+      background-color: #5364cc;
+      color: white !important;
+      font-size: 20px;
+      width: 200px;
+      font-weight: 600;
+    }
+
+    .paper-btn-parent {
+      display: flex;
+      justify-content: center;
+      margin: 16px 0px;
+    }
+
+    .paper-btn:hover {
+      opacity: 0.85;
+    }
+
+    .container {
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .venue {
+      font-size: 23px;
+    }
+
+    .topnav {
+      background-color: #EEEEEE;
+      overflow: hidden;
+    }
+
+    .topnav div {
+      max-width: 1070px;
+      margin: 0 auto;
+    }
+
+    .topnav a {
+      display: inline-block;
+      color: black;
+      text-align: center;
+      vertical-align: middle;
+      padding: 16px 16px;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    .topnav img {
+      padding: 2px 0px;
+      width: 100%;
+      margin: 0.2em 0px 0.3em 0px;
+      vertical-align: middle;
+    }
+
+    pre {
+      font-size: 0.9em;
+      padding-left: 7px;
+      padding-right: 7px;
+      padding-top: 3px;
+      padding-bottom: 3px;
+      border-radius: 3px;
+      background-color: rgb(235, 235, 235);
+      overflow-x: auto;
+    }
+
+    .download-thumb {
+      display: flex;
+    }
+
+    @media only screen and (max-width: 620px) {
+      .download-thumb {
+        display: none;
+      }
+    }
+
+    .paper-stuff {
+      width: 50%;
+      font-size: 20px;
+    }
+
+    @media only screen and (max-width: 620px) {
+      .paper-stuff {
+        width: 100%;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .column {
+      text-align: center;
+      float: left;
+      width: 16.666%;
+      padding: 5px;
+    }
+
+    .column3 {
+      text-align: center;
+      float: left;
+      width: 33.333%;
+      padding: 5px;
+    }
+
+    .column4 {
+      text-align: center;
+      float: left;
+      width: 50%;
+      padding: 5px;
+    }
+
+    .column5 {
+      text-align: center;
+      float: left;
+      width: 20%;
+      padding: 5px;
+    }
+
+    .column10 {
+      text-align: center;
+      float: left;
+      width: 10%;
+      padding: 5px;
+    }
+
+    .border-right {
+      border-right: 1px solid black;
+    }
+
+    .border-bottom {
+      border-bottom: 1px solid black;
+    }
+
+
+    .row-center {
+      margin: 16px 0px 16px 0px;
+      text-align: center;
+    }
+
+    /* Clearfix (clear floats) */
+    .row::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+
+    .img-fluid {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .figure-img {
+      margin-bottom: 0.5rem;
+      line-height: 1;
+    }
+
+    .rounded-circle {
+      border-radius: 50% !important;
+    }
+
+    /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+    @media screen and (max-width: 500px) {
+      .column {
+        width: 100%;
+      }
+    }
+
+    @media screen and (max-width: 500px) {
+      .column3 {
+        width: 100%;
+      }
+    }
+
+    .paper-btn-parent2 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .paper-btn-child {
+      margin: 0 10px;
+      /* 添加适当的间距 */
+    }
+
+    .separator {
+      width: 5px;
+      /* 设置分隔符的宽度 */
+    }
+    .gray-bg {
+            background-color: #EFEFEF;
+        }
+        .white-bg {
+            background-color: #FFFFFF;
+        }
+        .red {
+            color: #CB0000;
+        }
+        .green {
+            color: #009901;
+        }
+        .blue {
+            color: #3166FF;
+        }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div id="content" class="container-fluid d-flex flex-column align-items-center gap-3">
+      <h1 class="text-nowrap mt-5">🏆 OpenHuEval Leaderboard 🏆</h1>
+      <h3 class="fw-light text-nowrap"><small id="warning">Evaluating Large Language Model on Hungarian Specifics<br></small></h3>
+
+      <div style="clear: both">
+        <div class="paper-btn-parent">
+          <a class="paper-btn" href="https://arxiv.org/abs/2503.21500">
+            <span class="material-icons"> description </span>
+            Paper
+          </a>
+          <a class="paper-btn" href="https://github.com/opendatalab/OpenHuEval">
+            <span class="material-icons"> code </span>
+            Code
+          </a>
+          <a class="paper-btn" href="./index.html">
+            <span class="material-icons"> description </span>
+            Project Page
+          </a>
+          <a class="paper-btn" href="./findings.html">
+            <span class="material-icons"> description </span>
+            LRM Analysis
+          </a>
+        </div>
+      </div>
+    </div>
+    <div>
+    <section>
+    <h4>Overall performance of 10 LLMs on OpenHuEval.</h4>
+    <table>
+      <thead>
+          <tr>
+              <th class="gray-bg" rowspan="2">Model</th>
+              <th class="gray-bg">HuWildBench</th>
+              <th class="gray-bg">HuSimpleQA</th>
+              <th colspan="2" class="gray-bg">HuProverbRea</th>
+              <th colspan="2" class="gray-bg">HuMatchingFIB</th>
+              <th colspan="2" class="gray-bg">HuStandardFIB</th>
+          </tr>
+          <tr>
+              <th class="gray-bg">WBScore</th>
+              <th class="gray-bg">Acc</th>
+              <th class="gray-bg">Acc. (OE)</th>
+              <th class="gray-bg">Acc. (2CQ)</th>
+              <th class="gray-bg">B acc.</th>
+              <th class="gray-bg">Q acc.</th>
+              <th class="gray-bg">B acc.</th>
+              <th class="gray-bg">Q acc.</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td class="white-bg">GPT-4o</td>
+              <td class="green">81.09</td>
+              <td class="red">50.3</td>
+              <td class="red">89.16</td>
+              <td class="red">95.51</td>
+              <td class="green">77.78</td>
+              <td class="green">43.88</td>
+              <td class="green">57.36</td>
+              <td class="green">15.05</td>
+          </tr>
+          <tr>
+              <td class="white-bg">GPT-4o-mini</td>
+              <td>74.19</td>
+              <td>25.56</td>
+              <td class="green">84.67</td>
+              <td>92.16</td>
+              <td>55.68</td>
+              <td>19.78</td>
+              <td>35.08</td>
+              <td>7.53</td>
+          </tr>
+          <tr>
+              <td class="white-bg">QwQ</td>
+              <td>58.02</td>
+              <td>9.09</td>
+              <td>67.49</td>
+              <td>84.23</td>
+              <td>38.65</td>
+              <td>12.23</td>
+              <td>6.05</td>
+              <td>0</td>
+          </tr>
+          <tr>
+              <td class="white-bg">Deepseek-R1</td>
+              <td class="red">82.96</td>
+              <td class="blue">34.58</td>
+              <td>82.29</td>
+              <td>91.72</td>
+              <td class="red">80.87</td>
+              <td class="red">47.12</td>
+              <td class="red">61.76</td>
+              <td class="red">17.2</td>
+          </tr>
+          <tr>
+              <td class="white-bg">Deepseek-V3</td>
+              <td class="blue">78.42</td>
+              <td>32.71</td>
+              <td class="blue">83.26</td>
+              <td class="blue">92.51</td>
+              <td class="blue">68.87</td>
+              <td class="blue">39.93</td>
+              <td class="blue">51.44</td>
+              <td class="blue">9.68</td>
+          </tr>
+          <tr>
+              <td class="white-bg">Llama-3.1-Instruct-70B</td>
+              <td>61.78</td>
+              <td class="green">35.99</td>
+              <td>80.18</td>
+              <td class="green">93.83</td>
+              <td>59.56</td>
+              <td>24.46</td>
+              <td>40.99</td>
+              <td>6.45</td>
+          </tr>
+          <tr>
+              <td class="white-bg">Llama-3.1-Instruct-8B</td>
+              <td>53.62</td>
+              <td>15.2</td>
+              <td>63.35</td>
+              <td>73.48</td>
+              <td>5.74</td>
+              <td>0.72</td>
+              <td>16.64</td>
+              <td>1.08</td>
+          </tr>
+          <tr>
+              <td class="white-bg">o1-mini</td>
+              <td>76.43</td>
+              <td>15.8</td>
+              <td>77.44</td>
+              <td>87.67</td>
+              <td>60.83</td>
+              <td>17.63</td>
+              <td>45.25</td>
+              <td>13.98</td>
+          </tr>
+          <tr>
+              <td class="white-bg">Qwen2.5-Instruct-72B</td>
+              <td>74.05</td>
+              <td>14.9</td>
+              <td>77.8</td>
+              <td>90.22</td>
+              <td>63.8</td>
+              <td>24.1</td>
+              <td>32.32</td>
+              <td>8.6</td>
+          </tr>
+          <tr>
+              <td class="white-bg">Qwen2.5-Instruct-7B</td>
+              <td>42.01</td>
+              <td>5.22</td>
+              <td>50.48</td>
+              <td>67.05</td>
+              <td>31.88</td>
+              <td>1.08</td>
+              <td>7.43</td>
+              <td>0</td>
+          </tr>
+      </tbody>
+  </table>
+  <p>
+  The first, second, and third place in each metric are marked with <span class="red">red</span>, <span class="green">green</span>, and <span class="blue">blue</span> text, respectively. In the FIB task evaluation metric, <strong>B</strong> represents the blank level, and <strong>Q</strong> represents the question level.
+</p>
+
+      <h3>🖊️ Citation</h3>
+      <pre>
+  @misc{yang2025openhuevalevaluatinglargelanguage,
+    title={OpenHuEval: Evaluating Large Language Model on Hungarian Specifics}, 
+    author={Haote Yang and Xingjian Wei and Jiang Wu and Noémi Ligeti-Nagy and Jiaxing Sun and Yinfan Wang and Zijian Győző Yang and Junyuan Gao and Jingchao Wang and Bowen Jiang and Shasha Wang and Nanjun Yu and Zihao Zhang and Shixin Hong and Hongwei Liu and Wei Li and Songyang Zhang and Dahua Lin and Lijun Wu and Gábor Prószéky and Conghui He},
+    year={2025},
+    eprint={2503.21500},
+    archivePrefix={arXiv},
+    primaryClass={cs.CL},
+    url={https://arxiv.org/abs/2503.21500}, 
+}
+    </pre>
+
+
+    </div>
+
+
+  </div>
+</body>
+
+</html>

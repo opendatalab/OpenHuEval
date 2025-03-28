@@ -1,0 +1,947 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+    <script type="text/javascript" charset="utf-8"
+    src="https://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+
+<style type="text/css">
+    body {
+        font-family: "Titillium Web", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+        font-weight: 300;
+        font-size: 20px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    @media screen and (min-width: 980px) {
+        body {
+            width: 980px;
+        }
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead th,
+    tbody td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+    }
+
+    thead th {
+        background-color: lightgray;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tbody tr:hover {
+        background-color: #ddd;
+    }
+
+    .fixed-header {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: #f9f9f9;
+    }
+
+
+    h4 {
+        text-align: center;
+        font-weight: 300;
+        line-height: 1.15em;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    h2 {
+        font-size: 1.75em;
+    }
+
+    a:link,
+    a:visited {
+        color: #5364cc;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #208799;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 40px;
+        font-weight: 500;
+    }
+
+    h2 {
+        font-weight: 400;
+        margin: 16px 0px 4px 0px;
+    }
+
+    .paper-title {
+        padding: 1px 0px 1px 0px;
+        font-weight: bold; /* 确保加粗 */
+    }
+
+    h5 {
+    font-size: 32px; 
+    font-weight: 700;
+    color: #000000; 
+    margin: 10px 0; 
+    line-height: 1.3;
+    text-align: left; 
+}
+
+    ul {
+        list-style-type: disc;
+        margin-left: 20px;
+    }
+
+    section {
+        margin: 32px 0px 32px 0px;
+        text-align: justify;
+        clear: both;
+    }
+
+    .col-5 {
+        width: 20%;
+        float: left;
+    }
+
+    .move-down {
+        margin-top: 1.2cm;
+    }
+
+    .col-4 {
+        width: 25%;
+        float: left;
+    }
+
+    .col-3 {
+        width: 33%;
+        float: left;
+    }
+
+    .col-2 {
+        width: 50%;
+        float: left;
+    }
+
+    .col-1 {
+        width: 100%;
+        float: left;
+    }
+
+    .author-row,
+    .affil-row {
+        font-size: 17px;
+    }
+
+    .author-row-new {
+        text-align: center;
+    }
+
+    .author-row-new a {
+        display: inline-block;
+        font-size: 17px;
+        padding: 4px;
+    }
+
+    .author-row-new sup {
+        color: #313436;
+        font-size: 13 px;
+        padding: 4px;
+    }
+
+    .affiliations-new {
+        font-size: 16px;
+        text-align: center;
+        width: 80%;
+        margin: 0 auto;
+        margin-bottom: 20px;
+    }
+
+    .row {
+        margin: 16px 0px 16px 0px;
+    }
+
+    .authors {
+        font-size: 26px;
+    }
+
+    .affiliatons {
+        font-size: 18px;
+    }
+
+    .affil-row {
+        margin-top: 18px;
+    }
+
+    .teaser {
+        max-width: 100%;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .screenshot {
+        width: 256px;
+        border: 1px solid #ddd;
+    }
+
+    .screenshot-el {
+        margin-bottom: 16px;
+    }
+
+    hr {
+        height: 1px;
+        border: 0;
+        border-top: 1px solid #ddd;
+        margin: 0;
+    }
+
+    .material-icons {
+        vertical-align: -6px;
+    }
+
+    p {
+        line-height: 1.25em;
+    }
+
+    .caption {
+        font-size: 20px;
+        color: #000000;
+        margin-top: 4px;
+        margin-bottom: 10px;
+        text-align: left;
+        font-weight: bold;
+    }
+
+
+    video {
+        display: block;
+        margin: auto;
+    }
+
+
+    figure {
+        display: block;
+        margin: auto;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    #bibtex pre {
+        font-size: 14px;
+        background-color: #eee;
+        padding: 16px;
+    }
+
+    .blue {
+        color: #2c82c9;
+        font-weight: bold;
+    }
+
+    .orange {
+        color: #d35400;
+        font-weight: bold;
+    }
+
+    .flex-row {
+        display: flex;
+        flex-flow: row wrap;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .flex-row-center {
+        display: flex;
+        flex-flow: row wrap;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .flex-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .flex-item {
+        flex: 0 0 50%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .paper-btn-coming-soon {
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+
+    .coming-soon {
+        position: absolute;
+        top: -15px;
+        right: -15px;
+    }
+
+    .center {
+        margin-left: 10.0%;
+        margin-right: 10.0%;
+    }
+
+    .paper-btn {
+        position: relative;
+        text-align: center;
+
+        display: inline-block;
+        margin: 8px;
+        padding: 8px 8px;
+
+        border-width: 0;
+        outline: none;
+        border-radius: 2px;
+
+        background-color: #E0F7FA;
+        color: #01579B !important;
+        font-size: 20px;
+        width: 200px;
+        font-weight: 600;
+    }
+
+    .paper-btn-tapestry {
+        position: relative;
+        text-align: center;
+
+        display: inline-block;
+        margin: 8px;
+        padding: 8px 8px;
+
+        border-width: 0;
+        outline: none;
+        border-radius: 2px;
+
+        background-color: #5364cc;
+        color: white !important;
+        font-size: 20px;
+        width: 200px;
+        font-weight: 600;
+    }
+
+    .paper-btn-parent {
+        display: flex;
+        justify-content: center;
+        margin: 16px 0px;
+    }
+
+    .paper-btn-parent1 {
+        display: flex;
+        justify-content: center;
+        margin: 8px 0px;
+        opacity: 1;
+    }
+
+    .paper-btn:hover {
+        opacity: 0.85;
+    }
+
+    .container {
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .venue {
+        font-size: 23px;
+    }
+
+    .topnav {
+        background-color: #EEEEEE;
+        overflow: hidden;
+    }
+
+    .topnav div {
+        max-width: 1070px;
+        margin: 0 auto;
+    }
+
+    .topnav a {
+        display: inline-block;
+        color: black;
+        text-align: center;
+        vertical-align: middle;
+        padding: 16px 16px;
+        text-decoration: none;
+        font-size: 18px;
+    }
+
+    .topnav img {
+        padding: 2px 0px;
+        width: 100%;
+        margin: 0.2em 0px 0.3em 0px;
+        vertical-align: middle;
+    }
+
+    pre {
+        font-size: 0.9em;
+        padding-left: 7px;
+        padding-right: 7px;
+        padding-top: 3px;
+        padding-bottom: 3px;
+        border-radius: 3px;
+        background-color: rgb(235, 235, 235);
+        overflow-x: auto;
+    }
+
+    .download-thumb {
+        display: flex;
+    }
+
+    @media only screen and (max-width: 620px) {
+        .download-thumb {
+            display: none;
+        }
+    }
+
+    .paper-stuff {
+        width: 50%;
+        font-size: 20px;
+    }
+
+    @media only screen and (max-width: 620px) {
+        .paper-stuff {
+            width: 100%;
+        }
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .column {
+        text-align: center;
+        float: left;
+        width: 16.666%;
+        padding: 5px;
+    }
+
+    .column3 {
+        text-align: center;
+        float: left;
+        width: 33.333%;
+        padding: 5px;
+    }
+
+    .column4 {
+        text-align: center;
+        float: left;
+        width: 50%;
+        padding: 5px;
+    }
+
+    .column5 {
+        text-align: center;
+        float: left;
+        width: 20%;
+        padding: 5px;
+    }
+
+    .column10 {
+        text-align: center;
+        float: left;
+        width: 10%;
+        padding: 5px;
+    }
+
+    .border-right {
+        border-right: 1px solid black;
+    }
+
+    .border-bottom {
+        border-bottom: 1px solid black;
+    }
+
+
+    .row-center {
+        margin: 16px 0px 16px 0px;
+        text-align: center;
+    }
+
+    /* Clearfix (clear floats) */
+    .row::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .figure-img {
+        margin-bottom: 0.5rem;
+        line-height: 1;
+    }
+
+    .rounded-circle {
+        border-radius: 50% !important;
+    }
+
+    /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+    @media screen and (max-width: 500px) {
+        .column {
+            width: 100%;
+        }
+    }
+
+    @media screen and (max-width: 500px) {
+        .column3 {
+            width: 100%;
+        }
+    }
+
+    .paper-btn-parent2 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .paper-btn-child {
+        margin: 0 10px;
+        /* 添加适当的间距 */
+    }
+
+    .separator {
+        width: 5px;
+        /* 设置分隔符的宽度 */
+    }
+</style>
+
+<script type="text/javascript"></script>
+<link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,600,400italic,600italic,300,300italic'
+    rel='stylesheet' type='text/css'>
+
+<head>
+    <title> OpenHuEval: Evaluating Large Language Model on Hungarian Specifics </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:description" content="A comprehensive tool utilization benchmark" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" href="https://images.emojiterra.com/google/noto-emoji/unicode-15.1/color/512px/1f6e0.png">
+</head>
+<body>
+    <div class="container">
+        <div class="paper-title">
+            <h1>
+                OpenHuEval: Evaluating Large Language Model on Hungarian Specifics
+        </div>
+
+        <div id="authors">
+            <center>
+                <div class="author-row-new">
+                    <b>Haote Yang</b><sup>1*</sup>,
+                    <b>Xingjian Wei</b><sup>1*</sup>,
+                    <b>Jiang Wu</b><sup>1*†</sup>,
+                    <b>Noémi Ligeti-Nagy</b><sup>2*</sup>,
+                    <b>Jiaxing Sun</b><sup>3*</sup>,
+                    <b>Yinfan Wang</b><sup>4*</sup>,
+                    <b>Győző Zijian Yang</b><sup>2*</sup>,
+                    <b>Junyuan Gao</b><sup>5*</sup>,
+                    <b>Jingchao Wang</b><sup>6</sup>,  
+                    <b>Bowen Jiang</b><sup>7</sup>,  
+                    <b>Shasha Wang</b><sup>1</sup>,  
+                    <b>Nanjun Yu</b><sup>6</sup>,  
+                    <b>Zihao Zhang</b><sup>8</sup>,  
+                    <b>Shixin Hong</b><sup>9</sup>,  
+                    <b>Hongwei Liu</b><sup>1</sup>,  
+                    <b>Wei Li</b><sup>1</sup>,  
+                    <b>Songyang Zhang</b><sup>1</sup>,  
+                    <b>Dahua Lin</b><sup>1,10</sup>,  
+                    <b>Lijun Wu</b><sup>1</sup>,  
+                    <b>Gábor Prószéky</b><sup>2</sup>,  
+                    <b>Conghui He</b><sup>1‡</sup>  
+                </div>
+            </center>
+            
+            <center>
+                <div class="affiliations">
+                    <span><sup>1</sup> Shanghai Artificial Intelligence Laboratory,</span>
+                    <span><sup>2</sup> Hungarian Research Centre for Linguistics,</span>
+                    <span><sup>3</sup> Wuhan University,</span>
+                    <span><sup>4</sup> Shanghai University,</span>
+                    <span><sup>5</sup> University of Chinese Academy of Sciences,</span>
+                    <span><sup>6</sup> East China Normal University,</span>
+                    <span><sup>7</sup> Peking University,</span>
+                    <span><sup>8</sup> Harbin Institute of Technology,</span>
+                    <span><sup>9</sup> Tsinghua University,</span>
+                    <span><sup>10</sup> Chinese University of Hong Kong</span>
+                </div>
+            </center>
+            
+            <center>
+                <div>
+                    <span><small><sup>*</sup> Equal Contribution</small></span>
+                    <span><small><sup>†</sup> Project lead</small></span>
+                    <span><small><sup>‡</sup> Corresponding Author</small></span>
+                </div>
+            </center>
+            
+            <center>
+                <div>
+                    <small><b>Correspondence:</b> <a href="mailto:heconghui@pjlab.org.cn">heconghui@pjlab.org.cn</a></small>
+                </div>
+            </center>
+            
+            <div style="clear: both">
+                <div class="paper-btn-parent">
+                    <a class="paper-btn" href="https://arxiv.org/abs/2503.21500">
+                        <span class="material-icons"> description </span>
+                        Paper
+                    </a>
+
+                    <a class="paper-btn" href="https://github.com/opendatalab/OpenHuEval">
+                        <span class="material-icons"> code </span>
+                        Code
+                    </a>
+                    <a class="paper-btn" href="./leaderboard.html">
+                        <span class="material-icons"> description </span>
+                        Leaderboard
+                    </a>
+                    <a class="paper-btn" href="./findings.html">
+                        <span class="material-icons"> description </span>
+                        LRM Analysis
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <section id="teaser-image">
+            <hr>
+            <center>
+                <figure>
+                    <img width="100%" src="./figure/Fig1_OpenHuEval_overview.png">
+                    <figcaption style="text-align: center; font-weight: bold;">
+                        Overview of <b>OpenHuEval</b>.
+                    </figcaption>
+                </figure>
+            </center>
+        </section>
+
+        <section>
+            <h4>Comparison of related benchmarks.</h4>
+            <table>
+                <thead class="fixed-header">
+                    <tr>
+                        <th>Benchmark</th>
+                        <th>Real User Query</th>
+                        <th>Self-awareness Evaluation</th>
+                        <th>Proverb Reasoning</th>
+                        <th>Generative Task & LLM-as-Judge</th>
+                        <th>Hungarian Lang</th>
+                        <th>Comprehensive Hu-specific</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="https://arxiv.org/abs/2406.04770">WildBench</a></td>
+                        <td><strong><span style="color: green;">&#x2714;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: green;">&#x2714;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://arxiv.org/abs/2411.04368">SimpleQA</a>, <a href="https://arxiv.org/abs/2411.07140">ChineseSimpleQA</a></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: green;">&#x2714;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: green;">&#x2714;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://arxiv.org/abs/2309.08591">MAPS</a></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: green;">&#x2714;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://arxiv.org/abs/2307.16039">MARC, MMMLU et al.</a></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: green;">&#x2714;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://arxiv.org/abs/2502.07346">BenchMAX</a></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: green;">&#x2714;</span></strong></td>
+                        <td><strong><span style="color: green;">&#x2714;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://aclanthology.org/2023.law-1.19/">MILQA</a></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: green;">&#x2714;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://aclanthology.org/2024.lrec-main.733/">HuLU</a></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                        <td><strong><span style="color: green;">&#x2714;</span></strong></td>
+                        <td><strong><span style="color: red;">&#x2718;</span></strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>OpenHuEval (ours)</strong></td>
+                        <td><strong><span style="color: green;">&#x2714;</span></strong></td>
+                        <td><strong><span style="color: green;">&#x2714;</span></strong></td>
+                        <td><strong><span style="color: green;">&#x2714;</span></strong></td>
+                        <td><strong><span style="color: green;">&#x2714;</span></strong></td>
+                        <td><strong><span style="color: green;">&#x2714;</span></strong></td>
+                        <td><strong><span style="color: green;">&#x2714;</span></strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h5>OpenHuEval</h5>
+            <p>
+                We introduce OpenHuEval, the first benchmark for LLMs focusing on the Hungarian language and specifics.
+                OpenHuEval is constructed from a vast collection of Hungarian-specific materials sourced from multiple origins.In the construction, we incorporated the latest design principles for evaluating LLMs, such as using real user queries from the internet, emphasizing the assessment of LLMs' generative capabilities, and employing LLM-as-judge to enhance the multidimensionality and accuracy of evaluations. Consequently, OpenHuEval provides the comprehensive, in-depth, and scientifically accurate assessment of LLM performance in the context of the Hungarian language and its specifics. We evaluated current mainstream LLMs, including both traditional LLMs and recently developed Large Reasoning Models. The results demonstrate the significant necessity for evaluation and model optimization tailored to the Hungarian language and specifics. We also established the framework for analyzing the thinking processes of LRMs with OpenHuEval, revealing intrinsic patterns and mechanisms of these models in non-English languages, with Hungarian serving as a representative example.
+            </p>
+        </section>
+
+        <section>
+            <h5>Construction OpenHuEval</h5>
+            <section id="example-image" style="display: flex; justify-content: center; gap: 40px; margin-top: 20px;">
+                <figure style="text-align: center;">
+                    <img width="300px" src="./figure/Construction_HuWildBench.png" alt="Image 1">
+                    <figcaption style="font-size: 16px; text-align: center; font-weight: bold;">
+                        Construction of HuWildBench
+                    </figcaption>
+                </figure>
+                <figure style="text-align: center;">
+                    <img width="300px" src="./figure/Construction_HuProverbRea.png" alt="Image 2">
+                    <figcaption style="font-size: 16px; text-align: center; font-weight: bold;">
+                        Construction of HuProverbRea
+                    </figcaption>
+                </figure>
+                <figure style="text-align: center;">
+                    <img width="300px" src="./figure/Construction_HuSimpleQA.png" alt="Image 3">
+                    <figcaption style="font-size: 16px; text-align: center; font-weight: bold;">
+                        Construction of HuSimpleQA
+                    </figcaption>
+                </figure>
+            </section>
+        </section>
+        
+
+
+
+
+        <section>
+            <h5>Examples of OpenHuEval</h5>
+            <section id="example-image">
+                <center>
+                    <figure>
+                        <img width="100%" src="./figure/Chapter2_OpenHuEval_examples.png" alt="Examples of OpenHuEval">
+                        <figcaption style="font-size: 16px; text-align: center; font-weight: bold; margin-top: 10px;">
+                            Examples of OpenHuEval. The original text is in black, while the translation into English is in 
+                            <span style="color: blue;">blue</span>. In HuMatchingFIB and HuStandardFIB, the blank is 
+                            <span style="background-color: yellow;">highlighted</span>.
+                        </figcaption>
+                    </figure>
+                </center>
+            </section>
+        </section>
+        
+        <section>
+            <h5>Data statistics of Openhueval</h5>
+            <p style="text-align: center; font-weight: bold; margin-top: 10px;">
+                The Hungarian-Specific Dimensions (HuSpecificDim).
+            </p>
+            <table align="center" style="width:100%; border-collapse: collapse; text-align: center; font-size: 14px;">
+                <thead>
+                    <tr style="border-bottom: 1.5pt solid black;">
+                        <th style="padding: 8px; border: 1px solid black;">HuSpecificDim</th>
+                        <th style="padding: 8px; border: 1px solid black;">Definition</th>
+                        <th style="padding: 8px; border: 1px solid black;">#Question</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Row 1 -->
+                    <tr style="background-color: #F2F2F2;">
+                        <td style="padding: 8px; border: 1px solid black;"><b>Language(𝓛)</b></td>
+                        <td style="padding: 8px; text-align: left; border: 1px solid black;">
+                            Basic knowledge of the Hungarian language and Hungarian proverbs and sayings
+                        </td>
+                        <td style="padding: 8px; border: 1px solid black;">1333</td>
+                    </tr>
+                    <!-- Row 2 -->
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid black;"><b>History(𝓗)</b></td>
+                        <td style="padding: 8px; text-align: left; border: 1px solid black;">
+                            Historical events and historical development of Hungary
+                        </td>
+                        <td style="padding: 8px; border: 1px solid black;">324</td>
+                    </tr>
+                    <!-- Row 3 -->
+                    <tr style="background-color: #F2F2F2;">
+                        <td style="padding: 8px; border: 1px solid black;">
+                            <b>Life, Culture, and Custom(𝓛𝓒𝓒)</b>
+                        </td>
+                        <td style="padding: 8px; text-align: left; border: 1px solid black;">
+                            Religion, rituals, culture, holidays, and the daily life of Hungarians
+                        </td>
+                        <td style="padding: 8px; border: 1px solid black;">622</td>
+                    </tr>
+                    <!-- Row 4 -->
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid black;">
+                            <b>Education and Profession(𝓔𝓟)</b>
+                        </td>
+                        <td style="padding: 8px; text-align: left; border: 1px solid black;">
+                            Education system in Hungary and related professions
+                        </td>
+                        <td style="padding: 8px; border: 1px solid black;">282</td>
+                    </tr>
+                    <!-- Row 5 -->
+                    <tr style="background-color: #F2F2F2;">
+                        <td style="padding: 8px; border: 1px solid black;">
+                            <b>Geography and Place(𝓖𝓟)</b>
+                        </td>
+                        <td style="padding: 8px; text-align: left; border: 1px solid black;">
+                            Geographical knowledge of Hungary, cities, and locations
+                        </td>
+                        <td style="padding: 8px; border: 1px solid black;">165</td>
+                    </tr>
+                    <!-- Row 6 -->
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid black;"><b>Figure(𝓕)</b></td>
+                        <td style="padding: 8px; text-align: left; border: 1px solid black;">
+                            Famous figures of Hungary
+                        </td>
+                        <td style="padding: 8px; border: 1px solid black;">409</td>
+                    </tr>
+                    <!-- Row 7 -->
+                    <tr style="background-color: #F2F2F2;">
+                        <td style="padding: 8px; border: 1px solid black;">
+                            <b>Politics, Policy, and Law(𝓟𝓟𝓛)</b>
+                        </td>
+                        <td style="padding: 8px; text-align: left; border: 1px solid black;">
+                            Politics, policies, and laws of Hungary
+                        </td>
+                        <td style="padding: 8px; border: 1px solid black;">485</td>
+                    </tr>
+                    <!-- Row 8 -->
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid black;">
+                            <b>Business and Finance(𝓑𝓕)</b>
+                        </td>
+                        <td style="padding: 8px; text-align: left; border: 1px solid black;">
+                            Business and finance in Hungary
+                        </td>
+                        <td style="padding: 8px; border: 1px solid black;">333</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="text-align: center; font-weight: bold; margin-top: 10px;">
+                Tasks of OpenHuEval
+            </p>
+            <table align="center" style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: center;">
+                <thead>
+                    <tr style="border-bottom: 1.5pt solid black;">
+                        <th style="padding: 8px; border: 1px solid black;">Task</th>
+                        <th style="padding: 8px; border: 1px solid black;">HuSpecificDim</th>
+                        <th style="padding: 8px; border: 1px solid black;">Judge</th>
+                        <th style="padding: 8px; border: 1px solid black;">Question Type</th>
+                        <th style="padding: 8px; border: 1px solid black;">#Question</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Row 1 -->
+                    <tr style="background-color: #EFEFEF;">
+                        <td style="padding: 8px; border: 1px solid black;"><b>HuWildBench</b></td>
+                        <td style="padding: 8px; border: 1px solid black;">𝓛𝓒𝓒, 𝓔𝓟, 𝓟𝓟𝓛, 𝓑𝓕</td>
+                        <td style="padding: 8px; border: 1px solid black;">llm, checklist</td>
+                        <td style="padding: 8px; border: 1px solid black;">OE</td>
+                        <td style="padding: 8px; border: 1px solid black;">1154</td>
+                    </tr>
+                    <!-- Row 2 -->
+                    <tr style="background-color: #FFFFFF;">
+                        <td style="padding: 8px; border: 1px solid black;"><b>HuSimpleQA</b></td>
+                        <td style="padding: 8px; border: 1px solid black;">𝓛, 𝓗, 𝓛𝓒𝓒, 𝓔𝓟, 𝓖𝓟, 𝓕, 𝓟𝓟𝓛, 𝓑𝓕</td>
+                        <td style="padding: 8px; border: 1px solid black;">llm</td>
+                        <td style="padding: 8px; border: 1px solid black;">OE</td>
+                        <td style="padding: 8px; border: 1px solid black;">1293</td>
+                    </tr>
+                    <!-- Row 3 -->
+                    <tr style="background-color: #EFEFEF;">
+                        <td style="padding: 8px; border: 1px solid black;"><b>HuProverbRea</b></td>
+                        <td style="padding: 8px; border: 1px solid black;">𝓛</td>
+                        <td style="padding: 8px; border: 1px solid black;">rule, llm</td>
+                        <td style="padding: 8px; border: 1px solid black;">2CQ/OE</td>
+                        <td style="padding: 8px; border: 1px solid black;">1135</td>
+                    </tr>
+                    <!-- Row 4 -->
+                    <tr style="background-color: #FFFFFF;">
+                        <td style="padding: 8px; border: 1px solid black;"><b>HuMatchingFIB</b></td>
+                        <td style="padding: 8px; border: 1px solid black;">𝓛, 𝓗</td>
+                        <td style="padding: 8px; border: 1px solid black;">rule</td>
+                        <td style="padding: 8px; border: 1px solid black;">Matching Filling-in-Blank</td>
+                        <td style="padding: 8px; border: 1px solid black;">278</td>
+                    </tr>
+                    <!-- Row 5 -->
+                    <tr style="background-color: #EFEFEF;">
+                        <td style="padding: 8px; border: 1px solid black;"><b>HuStandardFIB</b></td>
+                        <td style="padding: 8px; border: 1px solid black;">𝓛, 𝓗</td>
+                        <td style="padding: 8px; border: 1px solid black;">rule, similarity matching</td>
+                        <td style="padding: 8px; border: 1px solid black;">Standard Filling-in-Blank</td>
+                        <td style="padding: 8px; border: 1px solid black;">93</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+            <h5>🖊️ Citation</h5>
+            <pre>
+@misc{yang2025openhuevalevaluatinglargelanguage,
+    title={OpenHuEval: Evaluating Large Language Model on Hungarian Specifics}, 
+    author={Haote Yang and Xingjian Wei and Jiang Wu and Noémi Ligeti-Nagy and Jiaxing Sun and Yinfan Wang and Zijian Győző Yang and Junyuan Gao and Jingchao Wang and Bowen Jiang and Shasha Wang and Nanjun Yu and Zihao Zhang and Shixin Hong and Hongwei Liu and Wei Li and Songyang Zhang and Dahua Lin and Lijun Wu and Gábor Prószéky and Conghui He},
+    year={2025},
+    eprint={2503.21500},
+    archivePrefix={arXiv},
+    primaryClass={cs.CL},
+    url={https://arxiv.org/abs/2503.21500}, 
+}
+            </pre>
+        </section>
+    </div>
+</body>
+</html>
