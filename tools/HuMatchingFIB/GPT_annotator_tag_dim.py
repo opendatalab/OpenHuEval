@@ -58,12 +58,12 @@ def process_tag_dim(term, out_json_path, prompt):
             jso_data = json.loads(response)
         except Exception:
             jso_data = None
-        
-        term['segment_dim'] = jso_data # 存储原始response和解析后的
-        line = json.dumps(term, ensure_ascii=False)
-        out_file = open(out_json_path, 'a', encoding='utf-8')
-        out_file.write(line + '\n')
-        out_file.close()
+        if jso_data:
+            term['segment_dim'] = jso_data # 存储原始response和解析后的
+            line = json.dumps(term, ensure_ascii=False)
+            out_file = open(out_json_path, 'a', encoding='utf-8')
+            out_file.write(line + '\n')
+            out_file.close()
         
 def load_prompt_template(template_path):
     """Load the prompt template from a text file."""
@@ -91,5 +91,4 @@ def tag_dim_process(input_jsonl_path, output_jsonl_path):
             data_dict = New_data_dict
         # 多进程并行generate
         Parallel(n_jobs=NUM_PROC)(delayed(process_tag_dim)(entry, output_jsonl_path, prompt_template) for entry in tqdm(data_dict))
-            
 
