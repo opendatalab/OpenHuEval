@@ -46,9 +46,12 @@ If the segment addresses both the current blank and consecutive blanks, classify
 Dimension 4: Language Transfer
 Determine whether each Reasoning segment includes the process of translating Hungarian into English. The classification is as follows:
 Class 1: Contains Language Transfer
-The segment includes a translation process similar to:
-“Erőteljes #3# és a költői #4# gazdag használata jellemzi.”
-This translates to “It is characterized by strong #3# and rich use of poetic #4#.”
+When language transfer occurs in the reasoning process (e.g., translating Hungarian sentences or words into English), classify it as "Contains Language Transfer."
+For example, the segment includes a translation content similar to:
+- “Erőteljes #3# és a költői #4# gazdag használata jellemzi.” This translates to “It is characterized by strong #3# and rich use of poetic #4#...”
+- "\"Az egyiptomi állam élén a #0# állt.\" This translates to \"At the head of the Egyptian state stood the #0#..."
+- "Now, \"Angliában 1215-ben adták ki a #3#.\" This is \"In England, in 1215, they issued the #3#...\""
+- "The options are H.leghosszabb (longest) or A.legrövidebb (shortest).。。"
 Class 2: No Language Transfer
 The segment does not include the above translation process.
 Constraints:
@@ -207,7 +210,7 @@ Example Output:{
         'Dimension1': "Completely Correct",
         'Dimension2': "Complex Thought",
         'Dimension3': "Only Current Blank",
-        'Dimension4': "No Language Transfer",
+        'Dimension4': "Contains Language Transfer",
     },
     {
         'text': "**#1** This should be the year when Cleisthenes came to power. I recall that Cleisthenes implemented his reforms around 508 BC. Looking at the options, there's 'H.508,' which matches perfectly.",
@@ -239,7 +242,7 @@ Example Output:{
         'Dimension1': "Non Conclusion",
         'Dimension2': "Complex Thought"
         'Dimension3': "Only Current Blank",
-        'Dimension4': "No Language Transfer",
+        'Dimension4': "Contains Language Transfer",
     },
     {
         'text': "Wait, the text says \"mivel ezt a #4# a lakóhelyhez kötötte, létre kellett hoznia #5# területén 10 darab #6#.\" So, because he tied something to place of residence, he had to create 10 something in the territory of Attica. I think #4# is likely 'E. polgárjogot,' meaning citizenship rights, as citizenship was tied to place of residence.",
@@ -247,7 +250,7 @@ Example Output:{
         'Dimension1': "Completely Correct",
         'Dimension2': "Complex Thought",
         'Dimension3': "Current Blank and Consecutive Blank",
-        'Dimension4': "No Language Transfer",
+        'Dimension4': "Contains Language Transfer",
     },
     {
         'text': "**#5** This should be the territory where he created these 10 units. Since it's Attica, 'C. Attika' seems appropriate.",
@@ -279,7 +282,7 @@ Example Output:{
         'Dimension1': "Non Conclusion",
         'Dimension2': "Complex Thought",
         'Dimension3': "Only Current Blank",
-        'Dimension4': "No Language Transfer",
+        'Dimension4': "Contains Language Transfer",
     },
     {
         'text': "Wait, perhaps it's referring to the local leaders within each tribe or district. Maybe like the 'phylarch,' but I don't know if that's directly translatable. Given the options, perhaps 'B. sztratégosz' could work, but I'm not entirely sure.",
@@ -295,7 +298,7 @@ Example Output:{
         'Dimension1': "Completely Correct",
         'Dimension2': "Simple Assertion",
         'Dimension3': "Only Current Blank",
-        'Dimension4': "No Language Transfer",
+        'Dimension4': "Contains Language Transfer",
     },
     {
         'text': "**#10** And also in the hands of the #10# (ekklészia), which is the assembly, the Ekklesia. I think 'D. népgyűlés' corresponds to the assembly of the people, so that should be it.",

@@ -32,5 +32,5 @@ if __name__ == "__main__":
     tag_dim_process(save_seg_path, dim_save_path)
     
     # 4. 根据dim统计相应指标
-    output_statistic_path = temp_save_path + '/' + Model + '_respone_dim_statistic_result.jsonl'
+    output_statistic_path = temp_save_path + '/' + Model + '_respone_dim_statistic_result'
     analyze_reasoning_stats(dim_save_path, output_statistic_path)
