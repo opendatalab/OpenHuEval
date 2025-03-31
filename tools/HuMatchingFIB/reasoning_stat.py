@@ -19,6 +19,13 @@ def analyze_reasoning_stats(input_file_path, output_dir):
     dimension1_distribution_simple_assertion = defaultdict(int)
     dimension1_distribution_complex_thought = defaultdict(int)
     
+    dimension1_distribution_only_current_blank = defaultdict(int)
+    dimension1_distribution_Modify_Previous_Blanks = defaultdict(int)
+    dimension1_distribution_Current_Blank_and_Consecutive_Blank = defaultdict(int)
+    
+    dimension1_distribution_contain_language_transfer = defaultdict(int)
+    dimension1_distribution_no_language_transfer = defaultdict(int)
+    
     specific_condition_count = 0
 
     with open(input_file_path, 'r', encoding="utf-8") as file:
@@ -63,9 +70,21 @@ def analyze_reasoning_stats(input_file_path, output_dir):
                                     dimension3_value = segment["Dimension3"]
                                     dimension3_counts[dimension3_value] += 1
                                     
+                                    if dimension3_value == "Only Current Blank" and "Dimension1" in segment:
+                                        dimension1_distribution_only_current_blank[segment["Dimension1"]] += 1
+                                    if dimension3_value == "Modify Previous Blanks" and "Dimension1" in segment:
+                                        dimension1_distribution_Modify_Previous_Blanks[segment["Dimension1"]] += 1
+                                    if dimension3_value == "Current Blank and Consecutive Blank" and "Dimension1" in segment:
+                                        dimension1_distribution_Current_Blank_and_Consecutive_Blank[segment["Dimension1"]] += 1
+                                        
                                 if "Dimension4" in segment and segment["category"] == "Reasoning":
                                     dimension4_value = segment["Dimension4"]
                                     dimension4_counts[dimension4_value] += 1
+                                    
+                                    if dimension4_value == "Contains Language Transfer" and "Dimension1" in segment:
+                                        dimension1_distribution_contain_language_transfer[segment["Dimension1"]] += 1
+                                    if dimension4_value == "No Language Transfer" and "Dimension1" in segment:
+                                        dimension1_distribution_no_language_transfer[segment["Dimension1"]] += 1
                                     
                                 if segment.get("Dimension2") == "Simple Assertion" and segment.get("Dimension1") == "Completely Correct":
                                     specific_condition_count += 1                                
@@ -103,7 +122,12 @@ def analyze_reasoning_stats(input_file_path, output_dir):
             'Dimension3': dict(dimension3_counts),
             'Dimension4': dict(dimension4_counts),
             'Dimension1_Simple_Assertion': dict(dimension1_distribution_simple_assertion),
-            'Dimension1_Complex_Thought': dict(dimension1_distribution_complex_thought)
+            'Dimension1_Complex_Thought': dict(dimension1_distribution_complex_thought),
+            'Dimension1_Only_Current_Blank': dict(dimension1_distribution_only_current_blank),
+            'Dimension1_Modify_Previous_Blanks': dict(dimension1_distribution_Modify_Previous_Blanks),
+            'Dimension1_Current_Blank_and_Consecutive_Blank': dict(dimension1_distribution_Current_Blank_and_Consecutive_Blank),
+            'Dimension1_Contain_Language_Transfer': dict(dimension1_distribution_contain_language_transfer),
+            'Dimension1_No_Language_Transfer': dict(dimension1_distribution_no_language_transfer)
         }
     }
     
@@ -111,7 +135,8 @@ def analyze_reasoning_stats(input_file_path, output_dir):
     with open(json_path, 'w', encoding='utf-8') as f:
         json.dump(json_output, f, indent=4, ensure_ascii=False)
     
-    csv_path = os.path.join(output_dir, 'dimension1_distribution.csv')
+    # Simple complex count
+    csv_path = os.path.join(output_dir, 'dimension1_simple_complex_distribution.csv')
     with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(['Value', 'Simple Assertion', 'Complex Thought'])
@@ -124,6 +149,37 @@ def analyze_reasoning_stats(input_file_path, output_dir):
     
     print(f"Analysis complete. Results saved to:")
     print(f"- JSON file: {json_path}")
+    print(f"- CSV file: {csv_path}")
+    
+    # Blank count
+    csv_path = os.path.join(output_dir, 'dimension1_blank_distribution.csv')
+    with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['Value', 'Only Current Blank', 'Modify Previous Blanks', 'Current Blank and Consecutive Blank'])
+        
+        all_dim1_values = set(dimension1_distribution_only_current_blank.keys()) | set(dimension1_distribution_Modify_Previous_Blanks.keys()) | set(dimension1_distribution_Current_Blank_and_Consecutive_Blank.keys())
+        for value in sorted(all_dim1_values):
+            only_blank_count = dimension1_distribution_only_current_blank.get(value, 0)
+            modified_blanl_count = dimension1_distribution_Modify_Previous_Blanks.get(value, 0)
+            current_consecutive_count = dimension1_distribution_Current_Blank_and_Consecutive_Blank.get(value, 0)
+            writer.writerow([value, only_blank_count, modified_blanl_count, current_consecutive_count])
+    
+    print(f"Analysis complete. Results saved to:")
+    print(f"- CSV file: {csv_path}")
+    
+    # Transfer count
+    csv_path = os.path.join(output_dir, 'dimension1_lang_transfer_distribution.csv')
+    with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['Value', 'Contains Language Transfer', 'No Language Transfer'])
+        
+        all_dim1_values = set(dimension1_distribution_contain_language_transfer.keys()) | set(dimension1_distribution_no_language_transfer.keys())
+        for value in sorted(all_dim1_values):
+            tansfer_count = dimension1_distribution_contain_language_transfer.get(value, 0)
+            no_transfer_count = dimension1_distribution_no_language_transfer.get(value, 0)
+            writer.writerow([value, tansfer_count, no_transfer_count])
+    
+    print(f"Analysis complete. Results saved to:")
     print(f"- CSV file: {csv_path}")
     
     return json_output
