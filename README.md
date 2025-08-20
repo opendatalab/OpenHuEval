@@ -160,6 +160,7 @@ Below are the steps for quickly downloading OpenHuEval and using OpenCompass for
 ### 1. OpenCompass Environment Setup
 
 Refer to the installation steps for [OpenCompass](https://github.com/open-compass/OpenCompass/?tab=readme-ov-file#%EF%B8%8F-installation).
+Please use this [forked repo](https://github.com/jxd0712/opencompass) of OpenCompass for the evaluation of OpenHuEval.
 
 ### 2. Download OpenHuEval
 
@@ -217,14 +218,19 @@ python tools/HuMatchingFIB/main_process.py
 ## 🖊️ Citation
 
 ```bibtex
-@misc{yang2025openhuevalevaluatinglargelanguage,
-      title={OpenHuEval: Evaluating Large Language Model on Hungarian Specifics}, 
-      author={Haote Yang and Xingjian Wei and Jiang Wu and Noémi Ligeti-Nagy and Jiaxing Sun and Yinfan Wang and Zijian Győző Yang and Junyuan Gao and Jingchao Wang and Bowen Jiang and Shasha Wang and Nanjun Yu and Zihao Zhang and Shixin Hong and Hongwei Liu and Wei Li and Songyang Zhang and Dahua Lin and Lijun Wu and Gábor Prószéky and Conghui He},
-      year={2025},
-      eprint={2503.21500},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2503.21500}, 
+@inproceedings{yang-etal-2025-openhueval,
+    title = "{O}pen{H}u{E}val: Evaluating Large Language Model on {H}ungarian Specifics",
+    author = "Yang, Haote  and Wei, Xingjian  and Wu, Jiang  and Ligeti-Nagy, No{\'e}mi  and Sun, Jiaxing  and Wang, Yinfan  and Yang, Gy{\H{o}}z{\H{o}} Zijian  and Gao, Junyuan  and Wang, Jingchao  and Jiang, Bowen  and Wang, Shasha  and Yu, Nanjun  and Zhang, Zihao  and Hong, Shixin  and Liu, Hongwei  and Li, Wei  and Zhang, Songyang  and Lin, Dahua  and Wu, Lijun  and Pr{\'o}sz{\'e}ky, G{\'a}bor  and He, Conghui",
+    editor = "Che, Wanxiang  and Nabende, Joyce  and Shutova, Ekaterina  and Pilehvar, Mohammad Taher",
+    booktitle = "Findings of the Association for Computational Linguistics: ACL 2025",
+    month = jul,
+    year = "2025",
+    address = "Vienna, Austria",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.findings-acl.390/",
+    doi = "10.18653/v1/2025.findings-acl.390",
+    pages = "7464--7520",
+    ISBN = "979-8-89176-256-5",
 }
 ```
 
